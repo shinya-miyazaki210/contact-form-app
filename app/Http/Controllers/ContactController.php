@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -46,5 +47,43 @@ class ContactController extends Controller
             'category',
             'tags'
         ));
+    }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'gender' => ['required', 'in:1,2,3'],
+            'email' => ['required', 'email', 'max:255'],
+            'tel' => ['required', 'regex:/^[0-9]{10,11}$/'],
+            'address' => ['required', 'string', 'max:255'],
+            'building' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'tag_ids' => ['nullable', 'array'],
+            'tag_ids.*' => ['integer', 'exists:tags,id'],
+            'detail' => ['required', 'string', 'max:120'],
+        ]);
+
+        // お問い合わせ内容を保存
+        $contact = Contact::create([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'gender' => $validated['gender'],
+            'email' => $validated['email'],
+            'tel' => $validated['tel'],
+            'address' => $validated['address'],
+            'building' => $validated['building'] ?? null,
+            'category_id' => $validated['category_id'],
+            'detail' => $validated['detail'],
+        ]);
+
+        // 選択されたタグを保存
+        $contact->tags()->sync($validated['tag_ids'] ?? []);
+
+        return redirect('/thanks');
+    }
+    public function thanks()
+    {
+        return view('contact.thanks');
     }
 }
