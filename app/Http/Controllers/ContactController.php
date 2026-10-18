@@ -104,4 +104,72 @@ class ContactController extends Controller
     {
         return view('contact.thanks');
     }
+
+    public function export(\App\Http\Requests\ExportContactRequest $request)
+    {
+        $query = Contact::with('category')->latest();
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->input('keyword');
+
+            $query->where(function ($q) use ($keyword) {
+                $q->where('first_name', 'like', "%{$keyword}%")
+                    ->orWhere('last_name', 'like', "%{$keyword}%")
+                    ->orWhereRaw(
+                        "CONCAT(first_name, ' ', last_name) LIKE ?",
+                        ["%{$keyword}%"]
+                    )
+                    ->orWhere('email', 'like', "%{$keyword}%");
+            });
+        }
+
+        if ($request->filled('gender') && $request->input('gender') !== '0') {
+            $query->where('gender', $request->input('gender'));
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->input('date'));
+        }
+
+        return response()->streamDownload(function () use ($query) {
+            $output = fopen('php://output', 'w');
+
+            fwrite($output, "\xEF\xBB\xBF");
+
+            fputcsv($output, [
+                'ID', '氏名', '性別', 'メール', '電話',
+                '住所', '建物', 'カテゴリ', '内容', '作成日時',
+            ]);
+
+            foreach ($query->cursor() as $contact) {
+                $gender = match ((int) $contact->gender) {
+                    1 => '男性',
+                    2 => '女性',
+                    3 => 'その他',
+                    default => '',
+                };
+
+                fputcsv($output, [
+                    $contact->id,
+                    $contact->first_name . ' ' . $contact->last_name,
+                    $gender,
+                    $contact->email,
+                    $contact->tel,
+                    $contact->address,
+                    $contact->building,
+                    $contact->category?->content,
+                    $contact->detail,
+                    $contact->created_at?->format('Y-m-d H:i:s'),
+                ]);
+            }
+
+            fclose($output);
+        }, 'contacts.csv', [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
 }

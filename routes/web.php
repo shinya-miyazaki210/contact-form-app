@@ -30,3 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/tags/{tag}', [TagController::class, 'update'])->name('admin.tags.update');
     Route::delete('/admin/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
 });
+
+// CSVエクスポート（ログイン必須）
+Route::get('/contacts/export', [ContactController::class, 'export'])
+    ->middleware('auth')
+    ->name('contacts.export');
