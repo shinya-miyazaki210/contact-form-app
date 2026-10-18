@@ -1,32 +1,41 @@
 <x-app-layout>
     <x-slot name="header">
-        <form action="/logout" method="post">
-            @csrf
-            <button
-                class="px-5 py-1.5 border border-[#ddd8d3] text-[#c4bab0] bg-white rounded hover:bg-gray-50 transition lowercase text-sm">logout</button>
-        </form>
+        <h2 class="text-lg font-semibold text-gray-700">タグ編集</h2>
     </x-slot>
 
     <div class="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-xl mx-auto">
-            <h2 class="text-center text-2xl font-serif text-amber-900 mb-6">タグ編集</h2>
+        <div class="max-w-2xl mx-auto">
+            <h3 class="text-center text-2xl font-serif text-amber-900 mb-6">
+                タグ名を編集
+            </h3>
 
-            <form action="/admin/tags/{{ $tag->id }}" method="post" class="bg-[#f9f6f2] rounded px-6 py-6">
+            <form action="{{ route('admin.tags.update', $tag->id) }}" method="post"
+                class="bg-[#faf7f4] rounded p-6">
                 @csrf
                 @method('PUT')
-                <label class="block text-sm text-[#6b5744] mb-2" for="tag-name-input">タグ名</label>
-                <input type="text" id="tag-name-input" name="name" value="{{ old('name', $tag->name) }}"
-                    class="w-full px-4 py-2 bg-white border border-[#ddd8d3] rounded text-gray-700 placeholder-[#c4bab0] focus:outline-none focus:border-amber-500" />
+
+                <label for="tag-name" class="block text-sm text-gray-700 mb-2">
+                    タグ名
+                </label>
+
+                <input
+                    type="text"
+                    id="tag-name"
+                    name="name"
+                    value="{{ old('name', $tag->name) }}"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-amber-500"
+                />
+
                 @error('name')
                     <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
                 @enderror
-                <div class="flex items-center gap-3 mt-4">
-                    <a href="/admin"
-                        class="px-6 py-2 bg-[#e8ddd2] text-[#9a938c] rounded hover:bg-[#ddd2c7] inline-block">
+
+                <div class="flex items-center gap-3 mt-6">
+                    <a href="{{ route('admin.index') }}" class="px-6 py-2 bg-[#e8dfd5] text-[#8b8178] rounded hover:bg-[#ddd1c5]">
                         戻る
                     </a>
-                    <button type="submit"
-                        class="px-6 py-2 bg-[#7d7470] text-white rounded hover:bg-[#6b5f57]">
+
+                    <button type="submit" class="px-6 py-2 bg-[#817770] text-white rounded hover:bg-[#706660]">
                         更新
                     </button>
                 </div>

@@ -5,11 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreContactRequest;
 
 class ContactController extends Controller
 {
-    public function confirm(Request $request)
+    public function index()
+    {
+        $categories = Category::orderByRaw(
+            "CASE content
+                WHEN '商品のお届けについて' THEN 1
+                WHEN '商品の交換について' THEN 2
+                WHEN '商品トラブル' THEN 3
+                WHEN 'ショップへのお問い合わせ' THEN 4
+                WHEN 'その他' THEN 5
+                ELSE 99
+            END"
+        )->get();
+
+        $tags = Tag::all();
+
+        return view('contact.index', compact('categories', 'tags'));
+    }
+
+    public function confirm(StoreContactRequest $request)
     {
 
         // 入力内容を検証する
@@ -48,7 +66,7 @@ class ContactController extends Controller
             'tags'
         ));
     }
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
