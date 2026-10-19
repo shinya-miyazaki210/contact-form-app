@@ -2,6 +2,4 @@
 
 namespace App\Http\Requests;
 
-class ExportContactRequest extends IndexContactRequest
-{
-}
+class ExportContactRequest extends IndexContactRequest {}

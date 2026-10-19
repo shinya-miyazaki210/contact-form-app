@@ -37,11 +37,12 @@ class ContactStoreTest extends TestCase
             'category_id' => $category->id,
         ]);
     }
+
     public function test_お問い合わせ完了画面が表示される(): void
     {
-        $response = $this->get("/thanks");
+        $response = $this->get('/thanks');
 
         $response->assertStatus(200);
-        $response->assertViewIs("contact.thanks");
+        $response->assertViewIs('contact.thanks');
     }
 }

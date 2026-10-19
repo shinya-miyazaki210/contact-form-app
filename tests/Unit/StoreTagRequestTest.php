@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Http\Requests\StoreTagRequest;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
@@ -13,7 +14,7 @@ class StoreTagRequestTest extends TestCase
 
     public function test_タグ名が未入力ならエラーになる(): void
     {
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
 
         $validator = Validator::make(
             ['name' => ''],
@@ -26,7 +27,7 @@ class StoreTagRequestTest extends TestCase
 
     public function test_タグ名が50文字を超えるとエラーになる(): void
     {
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
 
         $validator = Validator::make(
             ['name' => str_repeat('あ', 51)],
@@ -39,9 +40,9 @@ class StoreTagRequestTest extends TestCase
 
     public function test_登録済みのタグ名はエラーになる(): void
     {
-        \App\Models\Tag::create(['name' => 'テストタグ']);
+        Tag::create(['name' => 'テストタグ']);
 
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
 
         $validator = Validator::make(
             ['name' => 'テストタグ'],
@@ -54,7 +55,7 @@ class StoreTagRequestTest extends TestCase
 
     public function test_正常なタグ名はバリデーションを通過する(): void
     {
-        $request = new StoreTagRequest();
+        $request = new StoreTagRequest;
 
         $validator = Validator::make(
             ['name' => '新しいテストタグ'],

@@ -18,7 +18,7 @@ class ContactExportTest extends TestCase
             'first_name' => $name,
             'last_name' => 'テスト',
             'gender' => $gender,
-            'email' => uniqid('csv_') . '@example.com',
+            'email' => uniqid('csv_').'@example.com',
             'tel' => '09012345678',
             'address' => '東京都',
             'category_id' => $category->id,
@@ -34,7 +34,7 @@ class ContactExportTest extends TestCase
         return ob_get_clean();
     }
 
-    public function test_ログイン済みならCSVをダウンロードできる(): void
+    public function test_ログイン済みなら_cs_vをダウンロードできる(): void
     {
         $user = User::factory()->create();
 
@@ -51,7 +51,7 @@ class ContactExportTest extends TestCase
         );
     }
 
-    public function test_CSVにBOMとヘッダーとデータが含まれる(): void
+    public function test_cs_vに_bo_mとヘッダーとデータが含まれる(): void
     {
         $user = User::factory()->create();
         $category = Category::create(['content' => 'CSVテストカテゴリ']);
@@ -72,7 +72,7 @@ class ContactExportTest extends TestCase
         $this->assertStringContainsString('CSVテストカテゴリ', $csv);
     }
 
-    public function test_性別でCSVの出力対象を絞り込める(): void
+    public function test_性別で_cs_vの出力対象を絞り込める(): void
     {
         $user = User::factory()->create();
         $category = Category::create(['content' => 'CSVテストカテゴリ']);

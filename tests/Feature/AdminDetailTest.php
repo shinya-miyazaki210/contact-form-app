@@ -32,7 +32,7 @@ class AdminDetailTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-            ->get('/admin/contacts/' . $contact->id);
+            ->get('/admin/contacts/'.$contact->id);
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.show');

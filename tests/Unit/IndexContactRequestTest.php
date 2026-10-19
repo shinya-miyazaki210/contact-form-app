@@ -10,7 +10,7 @@ class IndexContactRequestTest extends TestCase
 {
     public function test_不正な性別はバリデーションエラーになる(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['gender' => '9'],
@@ -21,9 +21,9 @@ class IndexContactRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has('gender'));
     }
 
-    public function test_存在しないカテゴリIDはバリデーションエラーになる(): void
+    public function test_存在しないカテゴリ_i_dはバリデーションエラーになる(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['category_id' => 999999999],
@@ -36,7 +36,7 @@ class IndexContactRequestTest extends TestCase
 
     public function test_不正な日付形式はバリデーションエラーになる(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['date' => '2026/10/15'],
@@ -49,7 +49,7 @@ class IndexContactRequestTest extends TestCase
 
     public function test_正常な検索条件はバリデーションを通過する(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             [

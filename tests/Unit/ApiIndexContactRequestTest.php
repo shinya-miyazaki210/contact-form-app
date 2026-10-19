@@ -10,7 +10,7 @@ class ApiIndexContactRequestTest extends TestCase
 {
     public function test_不正なキーワードは拒否される(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['keyword' => str_repeat('あ', 256)],
@@ -22,7 +22,7 @@ class ApiIndexContactRequestTest extends TestCase
 
     public function test_不正な性別は拒否される(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['gender' => '9'],
@@ -34,7 +34,7 @@ class ApiIndexContactRequestTest extends TestCase
 
     public function test_存在しないカテゴリは拒否される(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['category_id' => 999999999],
@@ -46,7 +46,7 @@ class ApiIndexContactRequestTest extends TestCase
 
     public function test_不正な日付は拒否される(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['date' => '2026/10/18'],
@@ -58,7 +58,7 @@ class ApiIndexContactRequestTest extends TestCase
 
     public function test_不正なページ件数は拒否される(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             ['per_page' => 101],
@@ -70,7 +70,7 @@ class ApiIndexContactRequestTest extends TestCase
 
     public function test_正常な検索条件は通過する(): void
     {
-        $request = new IndexContactRequest();
+        $request = new IndexContactRequest;
 
         $validator = Validator::make(
             [

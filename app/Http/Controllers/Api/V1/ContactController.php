@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\IndexContactRequest;
+use App\Http\Requests\Api\V1\StoreContactRequest;
+use App\Http\Requests\Api\V1\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
+use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
@@ -16,29 +19,29 @@ class ContactController extends Controller
 
         $query = Contact::with(['category', 'tags']);
 
-        if (!empty($validated['keyword'])) {
+        if (! empty($validated['keyword'])) {
             $keyword = $validated['keyword'];
 
             $query->where(function ($q) use ($keyword) {
                 $q->where('first_name', 'like', "%{$keyword}%")
                     ->orWhere('last_name', 'like', "%{$keyword}%")
                     ->orWhereRaw(
-                        "CONCAT(last_name, first_name) LIKE ?",
+                        'CONCAT(last_name, first_name) LIKE ?',
                         ["%{$keyword}%"]
                     )
                     ->orWhere('email', 'like', "%{$keyword}%");
             });
         }
 
-        if (!empty($validated['gender'])) {
+        if (! empty($validated['gender'])) {
             $query->where('gender', $validated['gender']);
         }
 
-        if (!empty($validated['category_id'])) {
+        if (! empty($validated['category_id'])) {
             $query->where('category_id', $validated['category_id']);
         }
 
-        if (!empty($validated['date'])) {
+        if (! empty($validated['date'])) {
             $query->whereDate('created_at', $validated['date']);
         }
 
@@ -57,14 +60,14 @@ class ContactController extends Controller
         return new ContactResource($contact);
     }
 
-    public function store(\App\Http\Requests\Api\V1\StoreContactRequest $request)
+    public function store(StoreContactRequest $request)
     {
         $validated = $request->validated();
         $tagIds = $validated['tag_ids'] ?? [];
 
         unset($validated['tag_ids']);
 
-        $contact = \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $tagIds) {
+        $contact = DB::transaction(function () use ($validated, $tagIds) {
             $contact = Contact::create($validated);
             $contact->tags()->sync($tagIds);
 
@@ -78,14 +81,14 @@ class ContactController extends Controller
             ->setStatusCode(201);
     }
 
-    public function update(\App\Http\Requests\Api\V1\UpdateContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
         $validated = $request->validated();
         $tagIds = $validated['tag_ids'] ?? [];
 
         unset($validated['tag_ids']);
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($contact, $validated, $tagIds) {
+        DB::transaction(function () use ($contact, $validated, $tagIds) {
             $contact->update($validated);
             $contact->tags()->sync($tagIds);
         });
@@ -97,7 +100,7 @@ class ContactController extends Controller
 
     public function destroy(Contact $contact)
     {
-        \Illuminate\Support\Facades\DB::transaction(function () use ($contact) {
+        DB::transaction(function () use ($contact) {
             $contact->tags()->detach();
             $contact->delete();
         });

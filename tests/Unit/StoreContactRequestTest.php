@@ -3,16 +3,18 @@
 namespace Tests\Unit;
 
 use App\Http\Requests\StoreContactRequest;
+use App\Models\Category;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class StoreContactRequestTest extends TestCase
 {
     use DatabaseTransactions;
+
     public function test_必須項目が未入力ならエラーになる(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make([], $request->rules());
 
@@ -37,7 +39,7 @@ class StoreContactRequestTest extends TestCase
 
     public function test_不正なメール形式はバリデーションエラーになる(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             ['email' => 'invalid-email'],
@@ -50,7 +52,7 @@ class StoreContactRequestTest extends TestCase
 
     public function test_不正な電話番号はバリデーションエラーになる(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             ['tel' => '090-1234-5678'],
@@ -63,7 +65,7 @@ class StoreContactRequestTest extends TestCase
 
     public function test_お問い合わせ内容が120文字を超えるとエラーになる(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             ['detail' => str_repeat('あ', 121)],
@@ -76,11 +78,11 @@ class StoreContactRequestTest extends TestCase
 
     public function test_正常なお問い合わせ入力はバリデーションを通過する(): void
     {
-        $category = \App\Models\Category::create([
+        $category = Category::create([
             'content' => 'テスト用カテゴリ',
         ]);
 
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             [

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Tag;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class ContactSeeder extends Seeder
@@ -25,7 +26,7 @@ class ContactSeeder extends Seeder
             );
         }
 
-        $faker = \Faker\Factory::create('ja_JP');
+        $faker = Factory::create('ja_JP');
 
         for ($i = 0; $i < 20; $i++) {
             $contact = Contact::create([
@@ -36,8 +37,8 @@ class ContactSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail(),
                 'tel' => $faker->numerify('##########'),
                 'address' => $faker->prefecture()
-                    . $faker->city()
-                    . $faker->streetAddress(),
+                    .$faker->city()
+                    .$faker->streetAddress(),
                 'building' => $faker->optional()->secondaryAddress(),
                 'detail' => mb_substr(
                     $faker->realText(200),

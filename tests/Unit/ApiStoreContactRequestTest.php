@@ -15,7 +15,7 @@ class ApiStoreContactRequestTest extends TestCase
 
     public function test_必須項目が未入力ならエラーになる(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
         $validator = Validator::make([], $request->rules());
 
         foreach ([
@@ -31,7 +31,7 @@ class ApiStoreContactRequestTest extends TestCase
 
     public function test_不正なメール形式は拒否される(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             ['email' => 'invalid-email'],
@@ -43,7 +43,7 @@ class ApiStoreContactRequestTest extends TestCase
 
     public function test_ハイフン付き電話番号は拒否される(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             ['tel' => '090-1234-5678'],
@@ -55,7 +55,7 @@ class ApiStoreContactRequestTest extends TestCase
 
     public function test_存在しないカテゴリは拒否される(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             ['category_id' => 999999999],
@@ -67,7 +67,7 @@ class ApiStoreContactRequestTest extends TestCase
 
     public function test_存在しないタグは拒否される(): void
     {
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $rules = $request->rules();
 
@@ -92,7 +92,7 @@ class ApiStoreContactRequestTest extends TestCase
             'name' => 'APIテスト用タグ',
         ]);
 
-        $request = new StoreContactRequest();
+        $request = new StoreContactRequest;
 
         $validator = Validator::make(
             [

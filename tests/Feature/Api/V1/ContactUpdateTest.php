@@ -38,7 +38,7 @@ class ContactUpdateTest extends TestCase
         $contact = $this->createContact($category);
         $contact->tags()->attach($oldTag->id);
 
-        $response = $this->putJson('/api/v1/contacts/' . $contact->id, [
+        $response = $this->putJson('/api/v1/contacts/'.$contact->id, [
             'first_name' => '佐藤',
             'last_name' => '花子',
             'gender' => 2,
@@ -85,7 +85,7 @@ class ContactUpdateTest extends TestCase
 
         $contact = $this->createContact($category);
 
-        $this->putJson('/api/v1/contacts/' . $contact->id, [
+        $this->putJson('/api/v1/contacts/'.$contact->id, [
             'gender' => 9,
         ])
             ->assertStatus(422)

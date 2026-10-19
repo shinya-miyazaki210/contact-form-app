@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Tag;
-use App\Models\Contact;
 use App\Http\Requests\IndexContactRequest;
+use App\Models\Category;
+use App\Models\Contact;
+use App\Models\Tag;
 
 class AdminController extends Controller
 {
@@ -48,7 +48,7 @@ class AdminController extends Controller
         $categories = Category::orderBy('id')->get();
         $tags = Tag::all();
 
-        return view('admin.index', compact("contacts", "categories", "tags"));
+        return view('admin.index', compact('contacts', 'categories', 'tags'));
     }
 
     // お問い合わせ詳細
@@ -65,6 +65,6 @@ class AdminController extends Controller
         $contact->tags()->detach();
         $contact->delete();
 
-        return redirect()->route("admin.index");
+        return redirect()->route('admin.index');
     }
 }

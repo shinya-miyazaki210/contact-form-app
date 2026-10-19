@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ExportContactRequest;
+use App\Http\Requests\StoreContactRequest;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Tag;
-use App\Http\Requests\StoreContactRequest;
 
 class ContactController extends Controller
 {
@@ -66,6 +67,7 @@ class ContactController extends Controller
             'tags'
         ));
     }
+
     public function store(StoreContactRequest $request)
     {
         $validated = $request->validate([
@@ -100,12 +102,13 @@ class ContactController extends Controller
 
         return redirect('/thanks');
     }
+
     public function thanks()
     {
         return view('contact.thanks');
     }
 
-    public function export(\App\Http\Requests\ExportContactRequest $request)
+    public function export(ExportContactRequest $request)
     {
         $query = Contact::with('category')->latest();
 
@@ -155,7 +158,7 @@ class ContactController extends Controller
 
                 fputcsv($output, [
                     $contact->id,
-                    $contact->first_name . ' ' . $contact->last_name,
+                    $contact->first_name.' '.$contact->last_name,
                     $gender,
                     $contact->email,
                     $contact->tel,

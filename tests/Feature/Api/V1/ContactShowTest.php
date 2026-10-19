@@ -35,7 +35,7 @@ class ContactShowTest extends TestCase
 
         $contact->tags()->attach($tag->id);
 
-        $this->getJson('/api/v1/contacts/' . $contact->id)
+        $this->getJson('/api/v1/contacts/'.$contact->id)
             ->assertOk()
             ->assertJsonPath('data.id', $contact->id)
             ->assertJsonPath('data.first_name', '山田')

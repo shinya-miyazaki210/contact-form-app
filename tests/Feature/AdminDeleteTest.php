@@ -32,7 +32,7 @@ class AdminDeleteTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-            ->delete('/admin/contacts/' . $contact->id);
+            ->delete('/admin/contacts/'.$contact->id);
 
         $response->assertRedirect('/admin');
 

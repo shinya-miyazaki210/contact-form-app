@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
@@ -14,7 +16,7 @@ class UpdateTagRequestTest extends TestCase
 
     public function test_タグ名が未入力ならエラーになる(): void
     {
-        $request = new UpdateTagRequest();
+        $request = new UpdateTagRequest;
 
         $validator = Validator::make(
             ['name' => ''],
@@ -27,7 +29,7 @@ class UpdateTagRequestTest extends TestCase
 
     public function test_タグ名が50文字を超えるとエラーになる(): void
     {
-        $request = new UpdateTagRequest();
+        $request = new UpdateTagRequest;
 
         $validator = Validator::make(
             ['name' => str_repeat('あ', 51)],
@@ -43,10 +45,10 @@ class UpdateTagRequestTest extends TestCase
         $tagA = Tag::create(['name' => 'タグA']);
         Tag::create(['name' => 'タグB']);
 
-        $request = new UpdateTagRequest();
+        $request = new UpdateTagRequest;
         $request->setRouteResolver(function () use ($tagA) {
-            $route = new \Illuminate\Routing\Route('PUT', '/admin/tags/{tag}', []);
-            $route->bind($request = \Illuminate\Http\Request::create('/admin/tags/' . $tagA->id, 'PUT'));
+            $route = new Route('PUT', '/admin/tags/{tag}', []);
+            $route->bind($request = Request::create('/admin/tags/'.$tagA->id, 'PUT'));
             $route->setParameter('tag', $tagA);
 
             return $route;
@@ -65,10 +67,10 @@ class UpdateTagRequestTest extends TestCase
     {
         $tag = Tag::create(['name' => '既存タグ']);
 
-        $request = new UpdateTagRequest();
+        $request = new UpdateTagRequest;
         $request->setRouteResolver(function () use ($tag) {
-            $route = new \Illuminate\Routing\Route('PUT', '/admin/tags/{tag}', []);
-            $route->bind(\Illuminate\Http\Request::create('/admin/tags/' . $tag->id, 'PUT'));
+            $route = new Route('PUT', '/admin/tags/{tag}', []);
+            $route->bind(Request::create('/admin/tags/'.$tag->id, 'PUT'));
             $route->setParameter('tag', $tag);
 
             return $route;
@@ -86,10 +88,10 @@ class UpdateTagRequestTest extends TestCase
     {
         $tag = Tag::create(['name' => '変更前タグ']);
 
-        $request = new UpdateTagRequest();
+        $request = new UpdateTagRequest;
         $request->setRouteResolver(function () use ($tag) {
-            $route = new \Illuminate\Routing\Route('PUT', '/admin/tags/{tag}', []);
-            $route->bind(\Illuminate\Http\Request::create('/admin/tags/' . $tag->id, 'PUT'));
+            $route = new Route('PUT', '/admin/tags/{tag}', []);
+            $route->bind(Request::create('/admin/tags/'.$tag->id, 'PUT'));
             $route->setParameter('tag', $tag);
 
             return $route;

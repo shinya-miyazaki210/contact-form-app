@@ -17,7 +17,7 @@ class ContactIndexTest extends TestCase
             'first_name' => $name,
             'last_name' => 'テスト',
             'gender' => $gender,
-            'email' => uniqid('api_') . '@example.com',
+            'email' => uniqid('api_').'@example.com',
             'tel' => '09012345678',
             'address' => '東京都',
             'category_id' => $category->id,
@@ -58,7 +58,7 @@ class ContactIndexTest extends TestCase
         $this->createContact($category2, '田中', 1);
 
         $this->getJson(
-            '/api/v1/contacts?gender=1&category_id=' . $category1->id
+            '/api/v1/contacts?gender=1&category_id='.$category1->id
         )
             ->assertOk()
             ->assertJsonCount(1, 'data')
@@ -70,7 +70,7 @@ class ContactIndexTest extends TestCase
         $category = Category::create(['content' => 'APIテスト用']);
 
         for ($i = 0; $i < 5; $i++) {
-            $this->createContact($category, '山田' . $i);
+            $this->createContact($category, '山田'.$i);
         }
 
         $this->getJson('/api/v1/contacts?per_page=2')

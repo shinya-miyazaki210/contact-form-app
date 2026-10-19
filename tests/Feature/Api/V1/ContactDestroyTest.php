@@ -40,7 +40,7 @@ class ContactDestroyTest extends TestCase
             'tag_id' => $tag->id,
         ]);
 
-        $this->deleteJson('/api/v1/contacts/' . $contact->id)
+        $this->deleteJson('/api/v1/contacts/'.$contact->id)
             ->assertNoContent();
 
         $this->assertDatabaseMissing('contacts', [
